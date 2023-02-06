@@ -14,11 +14,16 @@ from .forms import LoginForm, AddTaskForm, UpdateTaskForm, AddEventForm, UpdateP
 def index(request):
 	todoitem_list = ToDoItem.objects.filter(user_id=request.user.id)
 	eventitem_list = EventItem.objects.filter(user_id=request.user.id)
+	todoexists = todoitem_list.exists()
+	eventexists = eventitem_list.exists()
 	
 	template = loader.get_template('todolist/index.html')
+
 	context = {
 		'todoitem_list': todoitem_list,
 		'eventitem_list': eventitem_list,
+		'todoexists': todoexists,
+		'eventexists': eventexists,
 		'user': request.user
 	}
 

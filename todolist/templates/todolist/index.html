@@ -3,17 +3,16 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-	{% if user.is_anonymous == False %}
+	{% if user.is_authenticated == True %}
 		<h1 class="text-center my-3">Welcome {{user.first_name}} {{user.last_name}}!</h1>
-
 		<div class="container">
 			<div class="row">
-				<h3 class="text-center mb-3">My Tasks</h3>
+				<h3 class="text-center mt-5 mb-3">My Tasks</h3>
 
-					{% if todoitem_list.length != 0 %}
+				{% if todoexists %}
 
-						<ul class="list-group col-lg-2 offset-lg-5 text center">
-							{% for todoitem in todoitem_list %}
+					<ul class="list-group col-lg-2 offset-lg-5 text center">
+						{% for todoitem in todoitem_list %}
 							<li class="list-group-item text-center">
 
 								<Strong>
@@ -21,50 +20,45 @@
 								</Strong>
 
 							</li>
-							{% endfor %}
-						</ul>
-
-					{% else %}
-
-						<p class="text-center my-3">No tasks have been created.</p>
-
-					{% endif %}
-
-				<h3 class="text-center my-3">My Events</h3>
-
-					{% if eventitem_list.length != 0 %}
-
-					<ul class="list-group col-lg-2 offset-lg-5 text center">
-						{% for eventitem in eventitem_list %}
-						<li class="list-group-item text-center">
-
-							<Strong>
-								<a href="{% url 'todolist:vieweventitem' eventitem.id %}" class="text-decoration-none">{{ eventitem.event_name }}</a>
-							</Strong>
-
-						</li>
 						{% endfor %}
 					</ul>
 
-					{% elif eventitem_list.length == 0 %}
+				{% else %}
 
-					<p class="text-center my-3">No events have been created.</p>
+					<p class="text-center my-2">No tasks have been created.</p>
 
-					{% endif %}
+				{% endif %}
+
+				<h3 class="text-center mt-5 mb-3">My Events</h3>
+
+				{% if eventexists %}
+
+					<ul class="list-group col-lg-2 offset-lg-5 text center">
+						{% for eventitem in eventitem_list %}
+							<li class="list-group-item text-center">
+
+								<Strong>
+									<a href="{% url 'todolist:vieweventitem' eventitem.id %}" class="text-decoration-none">{{ eventitem.event_name }}</a>
+								</Strong>
+
+							</li>
+						{% endfor %}
+					</ul>
+
+				{% else %}
+					<p class="text-center my-2">No events have been created.</p>
+				{% endif %}
 
 			</div>
 		</div>
 
-	{% elif user.is_anonymous == True %}
+	{% else %}
 	
 		<h2 class="text-center my-3">You are not authorized to access this page.</h2>
 		<p class="text-center">Kindly login <a href="{% url 'todolist:login' %}"> here.</a></p>
 
-	{% else %}
-		
-		<p class="text-center my-3">No tasks or events have been created.</p>
-
 	{% endif %}
+
 {% endblock %}
 
 
