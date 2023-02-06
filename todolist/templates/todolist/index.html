@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+	{% if todoitem_list and user.is_anonymous == False %}
+		<h1 class="text-center my-3">Welcome {{user.first_name}} {{user.last_name}}!</h1>
+		<div class="container">
+			<div class="row">
+				<h3 class="text-center mb-3">My Tasks</h3>
+					<ul class="list-group col-lg-2 offset-lg-5 text center">
+						{% for todoitem in todoitem_list %}
+						<li class="list-group-item text-center">
+
+							<Strong>
+							<a href="{% url 'todolist:viewtodoitem' todoitem.id %}" class="text-decoration-none">{{ todoitem.task_name }}</a>
+							</Strong>
+
+							<!-- <a href="/todolist/{{ todoitem.id }}/" class="text-decoration-none">{{ todoitem.task_name }}</a> -->
+
+						</li>
+						{% endfor %}
+					</ul>
+
+				<h3 class="text-center my-3">My Events</h3>
+					<ul class="list-group col-lg-2 offset-lg-5 text center">
+						{% for eventitem in eventitem_list %}
+						<li class="list-group-item text-center">
+
+							<Strong>
+								<a href="{% url 'todolist:vieweventitem' eventitem.id %}" class="text-decoration-none">{{ eventitem.event_name }}</a>
+							</Strong>
+
+						</li>
+						{% endfor %}
+					</ul>
+			</div>
+		</div>
+
+	{% elif user.is_anonymous == True %}
+	
+		<h2 class="text-center my-3">You are not authorized to access this page.</h2>
+		<p class="text-center">Kindly login <a href="{% url 'todolist:login' %}"> here.</a></p>
+
+	{% else %}
+		
+		<p class="text-center my-3">No tasks have been created.</p>
+
+	{% endif %}
+{% endblock %}
+
+
+<!-- MVT Pattern - Model, View, Template -->

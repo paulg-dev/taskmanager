@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-6 offset-3">
+				{% if is_user_authenticated == False %}
+					<h1>Something went wrong</h1>
+					<p>Please contact your administrator.</p>
+		
+					<a href="{% url 'todolist:index' %}">Back to index page.</a>
+				{% endif %}
+
+				<form action="{% url 'todolist:login' %}" method="post">
+
+					<!-- CSRF Token (Cross Site Request Forgeries)
+					all forms in Django should contain this csrf token to make sure that the form request is coming from tohe same django project. If not, django will block the request -->
+
+					{% csrf_token %}
+
+					<div class="mb-3">
+						<label for="username">Username:</label>
+						<input
+							type="text"
+							name="username"
+							class="form-control"
+							id="username"
+							maxlength="20"
+							value="{{ username }}"
+							required
+						>
+					</div>
+
+					<div class="mb-3">
+						<label for="password">Password:</label>
+						<input
+							type="password"
+							name="password"
+							class="form-control"
+							id="password"
+							maxlength="20"
+							value="{{ password }}"
+							required
+						>
+					</div>
+
+					<div class="text-center">
+						<input
+							type="submit"
+							class="btn btn-success"
+							value="Login"
+						>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
