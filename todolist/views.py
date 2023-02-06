@@ -8,7 +8,7 @@ from django.utils import timezone
 # We import the built-in 'User' model to be able to do operations to the built-in Users table from Django.
 from django.contrib.auth.models import User
 from .models import ToDoItem, EventItem
-from .forms import LoginForm, AddTaskForm, UpdateTaskForm, AddEventForm
+from .forms import LoginForm, AddTaskForm, UpdateTaskForm, AddEventForm, UpdateProfileForm
 
 # Create your views here.
 def index(request):
@@ -56,10 +56,10 @@ def register(request):
 	is_user_registered = False
 	
 	# Loops through each existing user and checks if they already exist in the table
-	for individual_user in users:
-		if individual_user.username == "johndoe":
-			is_user_registered = True
-			break
+	# for individual_user in users:
+	# 	if individual_user.username == "johndoe":
+	# 		is_user_registered = True
+	# 		break
 
 	# The context 'is_user_registered' is put after the for loop in order for it to get the updated value if 'for' loop above equals to True.
 	context = {
@@ -71,11 +71,11 @@ def register(request):
 		user = User()
 
 		# 2. Assign data values to each property of the model.
-		user.username = "johndoe"
+		user.username = "johndeex"
 		user.first_name = "John"
-		user.last_name = "Doe"
-		user.email = "john@mail.com"
-		user.set_password("john1234")
+		user.last_name = "Dee"
+		user.email = "johndee@email.com"
+		user.set_password("johndoe1")
 		user.is_staff = False
 		user.is_active = True
 
@@ -90,24 +90,42 @@ def register(request):
 
 	return render(request, "todolist/register.html", context)
 
-def change_password(request):
-	is_user_authenticated = False
-
-	user = authenticate(username="johndoe", password="john1234")
-
-	if user is not None:
-		authenticated_user = User.objects.get(username="johndoe")
-
-		authenticated_user.set_password("johndoe1")
-		authenticated_user.save()
-
-		is_user_authenticated = True
-
+def update_profile(request):
 	context = {
-		"is_user_authenticated": is_user_authenticated
+		"user": request.user,
+		"first_name": request.user.first_name,
+		"last_name": request.user.last_name,
+		"password": ""
 	}
 
-	return render(request, "todolist/change_password.html", context)
+	if request.method == 'POST':
+		form = UpdateProfileForm(request.POST)
+
+		if form.is_valid() == False:
+			form = UpdaProfileForm()
+
+		else:
+
+			first_name = form.cleaned_data['first_name']
+			last_name = form.cleaned_data['last_name']
+			password = form.cleaned_data['password']
+
+			if request.user:
+
+				request.user.first_name = first_name
+				request.user.last_name = last_name
+				request.user.set_password(password)
+				request.user.save()
+				return redirect("todolist:index")
+
+			else:
+
+				context = {
+				    "error": True
+				}
+
+	return render(request, "todolist/update_profile.html", context)
+
 
 def login_view(request):
 	context = {}
@@ -245,14 +263,14 @@ def add_event(request):
 		else:
 			event_name = form.cleaned_data['event_name']
 			description = form.cleaned_data['description']
-
+			event_date = form.cleaned_data['event_date']
 			duplicates = EventItem.objects.filter(event_name=event_name)
 
 			if not duplicates:
 				EventItem.objects.create(
 					event_name=event_name,
 					description=description,
-					# event_date=timezone.now() + timedelta(days=1),
+					event_date=event_date,
 					user_id=request.user.id
 				)
 
@@ -264,11 +282,3 @@ def add_event(request):
 				}
 
 	return render(request, "todolist/add_event.html", context)
-
-
-
-def update_profile(request):
-
-
-    return redirect("todolist:index")
-

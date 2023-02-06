@@ -16,3 +16,9 @@ class UpdateTaskForm(forms.Form):
 class AddEventForm(forms.Form):
 	event_name = forms.CharField(label="Event Name", max_length="50")
 	description = forms.CharField(label="Description", max_length="500")
+	event_date = forms.DateField(label="Event Date")
+
+class UpdateProfileForm(forms.Form):
+	first_name = forms.CharField(label="First Name", max_length="30")
+	last_name = forms.CharField(label="Last Name", max_length="30")
+	password = forms.CharField(label="Password", max_length="20")

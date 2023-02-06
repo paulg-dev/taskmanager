@@ -1,9 +1,18 @@
-{% if is_user_registered == True %}
-	<h1>Duplicate User Found!</h1>
-	<p>A duplicate user has been found, user creation unsuccessful!</p>
+{% extends 'base.html' %}
 
-{% else %}
-	<h1>User Successfully Createed!</h1>
-	<p>The account for {{first_name}} {{last_name}} has been created!</p>
+	{% block title %}Register{% endblock %}
+	{% block content %}
+	<div class="text-center">
 
-{% endif %}
+		{% if is_user_registered == True %}
+			<h1>Duplicate User Found!</h1>
+			<p>A duplicate user has been found, user creation unsuccessful!</p>
+
+		{% else %}
+			<h1>User Successfully Createed!</h1>
+			<p>The account for {{first_name}} {{last_name}} has been created!</p>
+
+		{% endif %}
+
+	</div>
+	{% endblock %}

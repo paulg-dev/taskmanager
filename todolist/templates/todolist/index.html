@@ -3,26 +3,37 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-	{% if todoitem_list and user.is_anonymous == False %}
+	{% if user.is_anonymous == False %}
 		<h1 class="text-center my-3">Welcome {{user.first_name}} {{user.last_name}}!</h1>
+
 		<div class="container">
 			<div class="row">
 				<h3 class="text-center mb-3">My Tasks</h3>
-					<ul class="list-group col-lg-2 offset-lg-5 text center">
-						{% for todoitem in todoitem_list %}
-						<li class="list-group-item text-center">
 
-							<Strong>
-							<a href="{% url 'todolist:viewtodoitem' todoitem.id %}" class="text-decoration-none">{{ todoitem.task_name }}</a>
-							</Strong>
+					{% if todoitem_list.length != 0 %}
 
-							<!-- <a href="/todolist/{{ todoitem.id }}/" class="text-decoration-none">{{ todoitem.task_name }}</a> -->
+						<ul class="list-group col-lg-2 offset-lg-5 text center">
+							{% for todoitem in todoitem_list %}
+							<li class="list-group-item text-center">
 
-						</li>
-						{% endfor %}
-					</ul>
+								<Strong>
+								<a href="{% url 'todolist:viewtodoitem' todoitem.id %}" class="text-decoration-none">{{ todoitem.task_name }}</a>
+								</Strong>
+
+							</li>
+							{% endfor %}
+						</ul>
+
+					{% else %}
+
+						<p class="text-center my-3">No tasks have been created.</p>
+
+					{% endif %}
 
 				<h3 class="text-center my-3">My Events</h3>
+
+					{% if eventitem_list.length != 0 %}
+
 					<ul class="list-group col-lg-2 offset-lg-5 text center">
 						{% for eventitem in eventitem_list %}
 						<li class="list-group-item text-center">
@@ -34,6 +45,13 @@
 						</li>
 						{% endfor %}
 					</ul>
+
+					{% elif eventitem_list.length == 0 %}
+
+					<p class="text-center my-3">No events have been created.</p>
+
+					{% endif %}
+
 			</div>
 		</div>
 
@@ -44,7 +62,7 @@
 
 	{% else %}
 		
-		<p class="text-center my-3">No tasks have been created.</p>
+		<p class="text-center my-3">No tasks or events have been created.</p>
 
 	{% endif %}
 {% endblock %}
